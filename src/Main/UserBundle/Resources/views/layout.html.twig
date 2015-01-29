@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Smalink - {% block title %}{% endblock title %}</title>
+        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/mainuser/css/default.css') }}">
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+ 
+        <section id="body-fosuser">
+            {% for key, message in app.session.getFlashes() %}
+            <div class="{{ key }}">
+                {{ message|trans({}, 'FOSUserBundle') }}
+            </div>
+            {% endfor %}
+            
+            <div id="content-fos">
+                {% block fos_user_content %}
+                {% endblock fos_user_content %}
+            </div>
+        </section>
+
+        <footer>
+            © Copyright 2012-{{ "now"|date("Y") }} <a href="http://nathanaelcherrier.com/" >Nathanaël Cherrier</a> -- All right reserved
+        </footer>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

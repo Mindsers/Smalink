@@ -1,0 +1,158 @@
+a{text-decoration: none;color: rgba(52, 152, 219,1.0);}
+a.btn, input[type="submit"]{text-decoration: none;color: rgba(236, 240, 241,1.0);padding: 10px;padding-left: 30px;padding-right: 30px;font-size: 1em;border-radius: 5px;margin: 10px;margin-top: 30px;display: inline-block;}
+a.btn.icon{text-decoration: none;color: rgba(236, 240, 241,1.0);padding: 1px;padding-left: 0px;padding-right: 0px;font-size: 1em;border-radius: 5px;margin: 5px;margin-top: 5px;display: inline-block;}
+a.btn.co, input[type="submit"]{border-top: 0px;border-left: 0px;font-weight: lighter;font-family: Helvetica;background-color: rgba(52, 152, 219,1.0);border-bottom: 3px solid rgba(41, 128, 185,1.0);border-right: 3px solid rgba(41, 128, 185,1.0);}
+a.btn.co:hover, input[type="submit"]:hover{background-color: rgba(41, 128, 185,1.0);border-bottom: 3px solid rgba(52, 152, 219,1.0);border-right: 3px solid rgba(52, 152, 219,1.0);}
+a.btn.ins{background-color: rgba(26, 188, 156,1.0);font-weight: lighter;font-family: Helvetica;border-bottom: 3px solid rgba(22, 160, 133,1.0);border-right: 3px solid rgba(22, 160, 133,1.0);}
+a.btn.ins:hover{background-color: rgba(22, 160, 133,1.0);border-bottom: 3px solid rgba(26, 188, 156,1.0);border-right: 3px solid rgba(26, 188, 156,1.0);}
+a.btn.red{background-color: rgba(231, 76, 60,1.0);border-bottom: 3px solid rgba(192, 57, 43,1.0);border-right: 3px solid rgba(192, 57, 43,1.0);}
+a.btn.red:hover{background-color: rgba(192, 57, 43,1.0);border-bottom: 3px solid rgba(231, 76, 60,1.0);border-right: 3px solid rgba(231, 76, 60,1.0);}
+form ul li{display: block;color: rgba(231, 76, 60,1.0);}
+
+input[type="text"],input[type="password"], input[type="email"]{
+	width: 250px;
+	height: 27px;
+	border-radius: 3px;
+	border: 1px solid #DDD;
+	padding: 5px;
+	font-size: 1em;
+	outline : none;
+	margin: 10px;
+	vertical-align: middle;
+}
+
+p.consign{
+	text-align: center;
+	padding: 20px;
+	color: rgba(52, 73, 94,1.0);
+}
+
+#form-link{
+	text-align: center;
+}
+
+.tab-link, .stats-link{
+	width: 800px;
+	margin: 30px;
+	padding: 1px;
+	margin: auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.tab-link header{
+	text-align: left;
+	background-color: #FFF;
+	height: 16px;
+	border: 0px;
+	padding: 5px;
+	border-bottom: 1px dotted #DDD;
+	padding-left: 20px;
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+.tab-link header span.click{
+	height: 16px;
+	padding-left: 20px;
+	font-size: 0.8em;
+	font-weight: lighter;
+	color: #DDD;
+}
+
+.tab-link .more, .stats-link .more{
+	font-size: 0.8em;
+	text-align: right;
+	padding-right: 20px; 
+}
+
+.tab-link .link{
+	background-color: rgba(255, 255, 255,1.0);
+	margin: 10px;
+	border-radius: 5px;
+	height: 80px;
+	border-right: 5px solid rgba(255, 255, 255,1.0);
+}
+
+.tab-link .link:hover{
+	box-shadow: 0px 0px 3px rgba(52, 73, 94,0.5);
+}
+
+.tab-link .link.activate{
+	border-left: 5px solid rgba(26, 188, 156,1.0);
+}
+
+.tab-link .link.activate header a{
+	color: rgba(26, 188, 156,1.0);
+}
+
+.tab-link .link.no-activate{
+	border-left: 5px solid rgba(231, 76, 60,1.0);
+}
+
+.tab-link .link.no-activate header a{
+	color: rgba(231, 76, 60,1.0);
+}
+
+.tab-link .link p{
+	padding: 5px;
+}
+
+.tab-link .link p.url-reel{
+	width: 650px;
+	height: 12px;
+	white-space: nowrap;
+	overflow: hidden;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+}
+
+.tab-link .link p.url-short{
+	padding-top: 10px;
+	color: rgba(52, 73, 94,1.0);
+}
+
+.tab-link .link p.url-short span{
+	font-style: italic;
+}
+
+.tab-link .link a.icon img{
+	width: 20px;
+	vertical-align: middle;
+}
+
+.tab-link .link .icon{
+	float: right;
+	text-align: right;
+}
+
+.tab-link .link header .icon img{
+	height: 15px;
+	width: auto;
+	margin-right: 3px;
+}
+
+.stats-link{
+	text-align: center;
+}
+
+.stats-link .stats-demo{
+	display: inline-block;
+	padding: 20px;
+	text-align: center;
+	background-color: #FFF;
+	border-radius: 3px;
+	margin:10px;
+	min-width: 100px;
+}
+
+.stats-link .stats-demo .value{
+	font-size: 3em;
+	color: rgba(22, 160, 133,1.0);
+}
+
+h1.error {
+	color: rgba(231, 76, 60,1.0);
+	text-align: center;
+	padding: 20px;
+}

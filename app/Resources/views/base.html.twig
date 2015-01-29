@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Smalink -{% endblock %}</title>
+        <link href='http://fonts.googleapis.com/css?family=Oxygen:400,700,300|Belleza|Merienda' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="{{ asset('style.css') }}">
+        {% block stylesheets %}<link rel="stylesheet" type="text/css" href="{{ asset('default.css') }}">{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    </head>
+    <body>
+        
+        <header>
+        {% block header %}
+            <div class="menu">
+                <p>
+                    <a class="start-menu" href="#">{{app.user.username}}</a>   
+                    
+                    {# <div>
+                        <ul>
+                            <li>Nouveau lien</li>
+                            <li>Mes liens</li>
+                            <li>Statistiques</li>
+                        </ul>
+                    </div> #}
+                </p>
+                <p class="off">
+                    <a href="{{ path('fos_user_security_login') }}"><img src="{{ asset('bundles/mainsite/images/off.png') }}"></a>
+                </p>
+            </div>
+            <a href="{{ path('main_site_dashboard') }}"><h1>Smalink.org</h1></a>
+        {% endblock %}
+        </header>
+        
+        {% block body %}{% endblock %}
+        <footer>
+            © Copyright 2012-{{ "now"|date("Y") }} <a href="http://nathanaelcherrier.com/" >Nathanaël Cherrier</a> -- All right reserved
+        </footer>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>
+ 

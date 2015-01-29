@@ -1,0 +1,37 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}{{parent()}} Liste des liens{% endblock %}
+{% block h1 %}{{parent()}} <span id="page">: Liste de vos liens</span>{% endblock %}
+
+{% block stylesheets %}{{parent()}}<link rel="stylesheet" type="text/css" href="{{ asset('bundles/mainsite/css/default.css') }}">{% endblock %}
+
+{% block body %}
+<section id="body">
+	<p class="consign">
+		Les liens sont classés par dates décroissantes pour vous simplifier la vie. <br>
+		Cliquez sur le titre pour voir les statitiques.
+	</p>
+
+	<div class="tab-link">
+		{% for lien in liens %}
+			<div class="link {% if lien.activate == true %}activate {% else %}no-activate {% endif %}">
+				<header>{# <a class="icon" title="Statistiques" href="{{ path('main_site_getlink', {'lien' : lien.id}) }}"><img src="{{ asset('bundles/mainsite/images/stats.png') }}"></a> #}<a title="Statistiques" href="{{ path('main_site_getlink', {'id' : lien.id}) }}">{{ lien.name }} <span class="click">{{ lien.click|length }} clique(s)</span> </a></header>
+				<section>
+					<p class="icon">
+						{% if lien.activate == 1 %} <a class="icon" title="Désactiver" href="{{ path('main_site_activelink', {'id' : lien.id}) }}"><img src="{{ asset('bundles/mainsite/images/checked.png') }}"></a> {% else %} <a class="icon" title="Activer" href="{{ path('main_site_activelink', {'id' : lien.id}) }}"><img src="{{ asset('bundles/mainsite/images/unchecked.png') }}"></a> {% endif%} <br>
+						<a class="icon" title="Supprimer" href="{{ path('main_site_supprlink', {'id' : lien.id}) }}"><img src="{{ asset('bundles/mainsite/images/trash.png') }}"></a>
+					</p>
+					<p class="url-reel">
+						Lien : <a href="{{ lien.lienReel }}">{{ lien.lienReel }}</a>
+					</p>
+					<p class="url-short">
+						Shortcut : <span>http://smalink.org/{{ lien.lienSmall }}</span>
+					</p>
+					
+				</section>
+			</div>
+		{% endfor %}
+	</div>
+</section>
+{% endblock %}
+

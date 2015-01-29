@@ -1,0 +1,37 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}{{parent()}} Erreur{% endblock %}
+
+{% block stylesheets %}{{parent()}}<link rel="stylesheet" type="text/css" href="{{ asset('bundles/mainsite/css/default.css') }}">{% endblock %}
+
+{% block body %}
+<section id="body">
+	<h1 class="error">Ouup's ...</h1>
+	<p class="consign">
+		Nous ne retrouvons pas le lien que vous souhaitez suivre dans notre base de donnée.
+	</p>
+
+	<p class="consign">
+		Ce lien n'a peut-être jamais existé. <br>
+		Peut-être a-t-il été désactivé par son créateur ou un administrateur de Smalink.org 
+	</p>
+
+	{% if is_granted('ROLE_USER') %}
+		<p style="text-align:center">
+			<a  class="btn co" href="{{ path('main_site_dashboard') }}">Accueil</a>
+		</p>
+	{% else %}
+		<p class="consign">
+			Si vous pensez que qu'il s'agit d'une erreur n'hésitez pas à prendre contact <br>
+			avec un administrateur grâce au lien dans le pied de page.  
+		</p>
+		
+		<p style="text-align:center">
+			<a  class="btn co" href="{{ path('fos_user_security_login') }}">Connexion</a><a class="btn ins" href="{{ path('fos_user_registration_register') }}">Inscription</a>
+		</p>
+	{% endif %}
+	
+
+</section>
+{% endblock %}
+

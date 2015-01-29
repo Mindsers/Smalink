@@ -1,0 +1,13 @@
+{% block subject %}Confirmation d'inscription{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+Bonjour {{ user.username }} !
+
+Vous avez, il n'y a pas longtemps, créé un compte sur le site smalink.org.
+Pour pourvoir l'utiliser vous devez confirmer votre inscription en cliquant sur le lien suivant : {{ confirmationUrl }}
+
+Amicalement,
+Registration Service de smalink.org
+{% endautoescape %}
+{% endblock %}

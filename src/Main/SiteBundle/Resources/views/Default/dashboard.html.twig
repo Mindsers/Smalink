@@ -1,0 +1,65 @@
+{% extends "::base.html.twig" %}
+
+{% block stylesheets %}{{parent()}} <link rel="stylesheet" type="text/css" href="{{ asset('bundles/mainsite/css/default.css') }}">{% endblock %}
+
+{% block title %}{{parent()}} Dashboad{% endblock %}
+
+{% block body %}
+<section id="body">
+	<div id="form-link">
+		<form method="post" {{ form_enctype(form) }}>
+			{{ form_widget(form._token) }}
+
+		  	{{ form_errors(form.name) }}
+		  	{{ form_widget(form.name) }}
+
+		  	{{ form_errors(form.lien_reel) }}
+		  	{{ form_widget(form.lien_reel) }}
+	        <input type="submit" class="btn btn-primary" />
+	    </form>
+	</div>
+
+	<div class="stats-link">
+		<p class="stats-demo">
+			<span class="value">{{ nombreLiens }}</span><br>
+			Liens
+		</p>
+		<p class="stats-demo">
+			<span class="value">{{ nombreClick }}</span><br>
+			Clics
+		</p>
+		<p class="stats-demo">
+			<span class="value">{{ (nombreClick / nombreLiens)|number_format(2, '.', ',') }}</span><br>
+			Clics / Lien
+		</p>
+		<p class="more">
+			<a href="{{ path('main_site_stats') }}">voir toutes les stats ➤</a>	
+		</p>
+	</div>
+
+	<div class="tab-link">
+		{% for lien in liens %}
+			<div class="link {% if lien.activate == true %}activate {% else %}no-activate {% endif %}">
+				<header><a title="Statistiques" href="{{ path('main_site_getlink', {'id' : lien.id}) }}">{{ lien.name }} <span class="click">{{ lien.click|length }} clique(s)</span> </a></header>
+				<section>
+					<p class="icon">
+						{% if lien.activate == 1 %} <a class="icon" title="Désactiver" href="{{ path('main_site_activelink', {'id' : lien.id}) }}"><img src="{{ asset('bundles/mainsite/images/checked.png') }}"></a> {% else %} <a class="icon" title="Activer" href="{{ path('main_site_activelink', {'id' : lien.id}) }}"><img src="{{ asset('bundles/mainsite/images/unchecked.png') }}"></a> {% endif%} <br>
+						<a class="icon" title="Supprimer" href="{{ path('main_site_supprlink', {'id' : lien.id}) }}"><img src="{{ asset('bundles/mainsite/images/trash.png') }}"></a>
+					</p>
+					<p class="url-reel">
+						Lien : <a href="{{ lien.lienReel }}">{{ lien.lienReel }}</a>
+					</p>
+					<p class="url-short">
+						Shortcut : <span>http://smalink.org/{{ lien.lienSmall }}</span>
+					</p>
+					
+				</section>
+			</div>
+		{% endfor %}
+		<p class="more">
+			<a href="{{ path('main_site_links') }}">voir tous mes liens ➤</a>	
+		</p>
+	</div>
+</section>
+{% endblock %}
+

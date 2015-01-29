@@ -1,0 +1,24 @@
+input[type="text"],input[type="password"], input[type="email"]{
+	width: 250px;
+	height: 30px;
+	border-radius: 3px;
+	border: 1px solid #666;
+	padding: 5px;
+	font-size: 1em;
+	outline : none;
+	margin: 10px;
+}
+
+input[type="submit"]{
+	width: 100px;
+	height: 30px;
+	border-radius: 3px;
+	border: 1px solid #666;
+	padding: 5px;
+	font-size: 1em;
+}
+
+#form-link{
+	padding: 40px;
+	padding-top: 60px;
+}

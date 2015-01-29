@@ -1,0 +1,19 @@
+{% extends "MainUserBundle::layout.html.twig" %}
+
+{% block title %}Connexion{% endblock title %}
+
+{% block fos_user_content %}
+{% if error %}
+    <div>{{ error|trans({}, 'FOSUserBundle') }}</div>
+{% endif %}
+
+<form action="{{ path("fos_user_security_check") }}" method="post">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+
+    <input type="text" id="username" name="_username" placeholder="Pseudo" value="{{ last_username }}" required="required" />
+    <input type="password" id="password" name="_password" placeholder="Mot de passe" required="required" />
+    <br>
+    <input type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" /> <a class="btn ins" href="{{ path('fos_user_registration_register') }}">Inscription</a>
+</form>
+
+{% endblock fos_user_content %}

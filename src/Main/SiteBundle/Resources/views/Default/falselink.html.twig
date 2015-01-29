@@ -1,0 +1,34 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}{{parent()}} Lien désactivé{% endblock %}
+
+{% block stylesheets %}{{parent()}}<link rel="stylesheet" type="text/css" href="{{ asset('bundles/mainsite/css/default.css') }}">{% endblock %}
+
+{% block body %}
+
+<div id="content">
+	<section id="body">
+	<h1 class="error">Ouup's ...</h1>
+	<p class="consign">
+		Le lien qui vous souhaitez suivre à été désactivé par son créateur <br>
+		ou l'équipe administrative de Smalink.org.
+	</p>
+
+	{% if is_granted('ROLE_USER') %}
+		<p style="text-align:center">
+			<a  class="btn co" href="{{ path('main_site_dashboard') }}">Accueil</a>
+		</p>
+	{% else %}
+		<p class="consign">
+			Si vous êtes le propriétaire de ce lien vous pouvez le réactiver en vous connectant.<br>
+			Sinon creez vos propres liens raccourcis en vous inscrivant sur Smalink.org.
+		</p>
+		
+		<p style="text-align:center">
+			<a  class="btn co" href="{{ path('fos_user_security_login') }}">Connexion</a><a class="btn ins" href="{{ path('fos_user_registration_register') }}">Inscription</a>
+		</p>
+	{% endif %}
+</section>
+</div>
+{% endblock %}
+

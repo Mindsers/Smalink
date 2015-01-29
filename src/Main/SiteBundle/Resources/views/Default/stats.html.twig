@@ -1,0 +1,134 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}{{parent()}} Statistique de vos liens{% endblock %}
+{% block h1 %}{{parent()}} <span id="page">: Statistique de vos liens</span>{% endblock %}
+
+{% block stylesheets %}{{parent()}}<link rel="stylesheet" type="text/css" href="{{ asset('bundles/mainsite/css/default.css') }}">{% endblock %}
+
+{% block body %}
+<section id="body">
+	<div class="stats-link">
+		<p class="stats-demo">
+			<span class="value">{{ nombreLiens }}</span><br>
+			Liens
+		</p>
+		<p class="stats-demo">
+			<span class="value">{{ nombreClick }}</span><br>
+			Clics
+		</p>
+		<p class="stats-demo">
+			<span class="value">{{ (nombreClick / nombreLiens)|number_format(2, '.', ',') }}</span><br>
+			Clics / Lien
+		</p>
+		<p class="stats-demo">
+			<canvas id="statsDate" height="200" width="740"></canvas><br><br>
+			Clics / Date
+		</p>
+		<p class="stats-demo">
+			<canvas id="statsRef" height="200" width="338"></canvas><br><br>
+			Clics / Référant
+		</p>
+		<p class="stats-demo">
+			<canvas id="statsPays" height="200" width="338"></canvas><br><br>
+			Clics / Pays
+		</p>
+		<p>
+			Les tableaux de statistiques présents sur cette page sont calculés à partir des données des 2 dernieres années.<br>
+			Les courbes bleues représentent les valeurs de l'année en cours. Les courbes grises représentent les valeurs de l'année précédente.
+		</p>
+	</div>
+	
+</section>
+{% endblock %}
+
+{% block javascripts %}
+	<script src="{{ asset('bundles/mainsite/js/Chart.js') }}"></script>
+	<script>
+		var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+		var dateData = {
+			labels : ["Janv.","Fév.","Mars","Avril","Mai","Juin","Juil.", "Août", "Sept.", "Oct.", "Nov.", "Déc."],
+			datasets : [
+				{
+					label: "My First dataset",
+					fillColor: "rgba(220,220,220,0.2)",
+					strokeColor: "rgba(220,220,220,1)",
+					pointColor: "rgba(220,220,220,1)",
+					pointStrokeColor: "#fff",
+					pointHighlightFill: "#fff",
+					pointHighlightStroke: "rgba(220,220,220,1)",
+					data: [{{ clickPrecedentYear[0] }},{{ clickPrecedentYear[1] }},{{ clickPrecedentYear[2] }},{{ clickPrecedentYear[3] }},{{ clickPrecedentYear[4] }},{{ clickPrecedentYear[5] }},{{ clickPrecedentYear[6] }}, {{ clickPrecedentYear[7] }}, {{ clickPrecedentYear[8] }}, {{ clickPrecedentYear[9] }}, {{ clickPrecedentYear[10] }}, {{ clickPrecedentYear[11] }}]
+				},
+				{
+					label: "My Second dataset",
+					fillColor : "rgba(151,187,205,0.2)",
+					strokeColor : "rgba(151,187,205,1)",
+					pointColor : "rgba(151,187,205,1)",
+					pointStrokeColor : "#fff",
+					pointHighlightFill : "#fff",
+					pointHighlightStroke : "rgba(151,187,205,1)",
+					data : [{% if 1 > "now"|date("m") %}{% else %}{{ clickThisYear[0] }}{% endif %},{% if 2 > "now"|date("m") %}{% else %}{{ clickThisYear[1] }}{% endif %},{% if 3 > "now"|date("m") %}{% else %}{{ clickThisYear[2] }}{% endif %},{% if 4 > "now"|date("m") %}{% else %}{{ clickThisYear[3] }}{% endif %},{% if 5 > "now"|date("m") %}{% else %}{{ clickThisYear[4] }}{% endif %},{% if 6 > "now"|date("m") %}{% else %}{{ clickThisYear[5] }}{% endif %},{% if 7 > "now"|date("m") %}{% else %}{{ clickThisYear[6] }}{% endif %}, {% if 8 > "now"|date("m") %}{% else %}{{ clickThisYear[7] }}{% endif %}, {% if 9 > "now"|date("m") %}{% else %}{{ clickThisYear[8] }}{% endif %}, {% if 10 > "now"|date("m") %}{% else %}{{ clickThisYear[9] }}{% endif %}, {% if 11 > "now"|date("m") %}{% else %}{{ clickThisYear[10] }}{% endif %}, {% if 12 > "now"|date("m") %}{% else %}{{ clickThisYear[11] }}{% endif %}]
+				}
+			]
+
+		}
+
+		var refData = {
+			labels: [{% for ref in refThisYear %}"{{ ref.referrer }}"{% if not loop.last %},{% endif %}{% endfor %}],
+			datasets: [
+				{
+					label: "My First dataset",
+					fillColor: "rgba(220,220,220,0.2)",
+					strokeColor: "rgba(220,220,220,1)",
+					pointColor: "rgba(220,220,220,1)",
+					pointStrokeColor: "#fff",
+					pointHighlightFill: "#fff",
+					pointHighlightStroke: "rgba(220,220,220,1)",
+					data: [{% for ref in refThisYear %}{{ ref.number }}{% if not loop.last %},{% endif %}{% endfor %}]
+				},
+				{
+					label: "My Second dataset",
+					fillColor: "rgba(151,187,205,0.2)",
+					strokeColor: "rgba(151,187,205,1)",
+					pointColor: "rgba(151,187,205,1)",
+					pointStrokeColor: "#fff",
+					pointHighlightFill: "#fff",
+					pointHighlightStroke: "rgba(151,187,205,1)",
+					data: [{% for ref in refThisYear %}{{ ref.number }}{% if not loop.last %},{% endif %}{% endfor %}]
+				}
+			]
+		};
+
+		var paysData = {
+			labels: [{% for country in countryThisYear %}"{{ country.country }}"{% if not loop.last %},{% endif %}{% endfor %}],
+			datasets: [
+				{
+					label: "My First dataset",
+					fillColor: "rgba(220,220,220,0.2)",
+					strokeColor: "rgba(220,220,220,1)",
+					pointColor: "rgba(220,220,220,1)",
+					pointStrokeColor: "#fff",
+					pointHighlightFill: "#fff",
+					pointHighlightStroke: "rgba(220,220,220,1)",
+					data: [{% for country in countryThisYear %}{{ country.number }}{% if not loop.last %},{% endif %}{% endfor %}]
+				},
+				{
+					label: "My Second dataset",
+					fillColor: "rgba(151,187,205,0.2)",
+					strokeColor: "rgba(151,187,205,1)",
+					pointColor: "rgba(151,187,205,1)",
+					pointStrokeColor: "#fff",
+					pointHighlightFill: "#fff",
+					pointHighlightStroke: "rgba(151,187,205,1)",
+					data: [{% for country in countryThisYear %}{{ country.number }}{% if not loop.last %},{% endif %}{% endfor %}]
+				}
+			]
+		};
+
+		window.onload = function(){
+			window.myRadar = new Chart(document.getElementById("statsRef").getContext("2d")).Radar(refData, {responsive: false});
+			window.myLine = new Chart(document.getElementById("statsDate").getContext("2d")).Line(dateData, {responsive: false});
+			window.myRadarTwo = new Chart(document.getElementById("statsPays").getContext("2d")).Radar(paysData, {responsive: false});
+		}
+
+	</script>
+{% endblock %}

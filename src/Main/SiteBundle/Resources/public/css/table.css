@@ -1,0 +1,24 @@
+table.links{
+	width: 600px;
+	margin: auto;
+	text-align: left;
+	border: 1px dotted #4B9DC0;
+}
+
+table.links thead {
+	background-color:  #4B9DC0;
+	text-align: center;
+}
+
+table.links td{
+	min-width: 100px;
+	margin: 5px;
+	border: 1px dotted #4B9DC0;
+	padding: 5px;
+	max-width: 350px;
+	overflow: scroll;
+}
+
+table.links tr.case-0{
+	background-color: rgba(73, 153, 187, 0.3);
+}

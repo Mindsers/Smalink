@@ -1,0 +1,29 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}{{parent()}} Nouveau lien{% endblock %}
+{% block h1 %}{{parent()}} <span id="page">: Nouveau lien</span>{% endblock %}
+
+{% block stylesheets %}{{parent()}}<link rel="stylesheet" type="text/css" href="{{ asset('bundles/mainsite/css/default.css') }}">{% endblock %}
+
+{% block body %}
+<section id="body">
+	<p class="consign">
+		Indiquez le nom de votre shortcut afin de mieux le retrouver 
+		<br>et le lien que vous souhaitez raccourcir.
+	</p>
+
+	<div id="form-link">
+		<form method="post" {{ form_enctype(form) }}>
+			{{ form_widget(form._token) }}
+
+		  	{{ form_errors(form.name) }}
+		  	{{ form_widget(form.name) }}
+
+		  	{{ form_errors(form.lien_reel) }}
+		  	{{ form_widget(form.lien_reel) }}
+	        <input type="submit" class="btn btn-primary" />
+	    </form>
+	</div>
+</section>
+{% endblock %}
+

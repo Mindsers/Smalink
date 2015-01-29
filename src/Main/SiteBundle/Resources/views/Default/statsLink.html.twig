@@ -1,0 +1,139 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}{{parent()}} Statistiques de {{ lien.name }}{% endblock %}
+{% block h1 %}{{parent()}} <span id="page">: Statistiques de {{ lien.name }}</span>{% endblock %}
+
+{% block stylesheets %}{{parent()}}<link rel="stylesheet" type="text/css" href="{{ asset('bundles/mainsite/css/default.css') }}">{% endblock %}
+
+{% block body %}
+<section id="body">
+	<div class="tab-link">
+		<div class="link {% if lien.activate == true %}activate {% else %}no-activate {% endif %}">
+			<header><a title="Statistiques" href="{{ path('main_site_getlink', {'id' : lien.id}) }}">{{ lien.name }} <span class="click">{{ lien.click|length }} clique(s)</span> </a></header>
+			<section>
+				<p class="icon">
+					{% if lien.activate == 1 %} <a class="icon" title="Désactiver" href="{{ path('main_site_activelink', {'id' : lien.id}) }}"><img src="{{ asset('bundles/mainsite/images/checked.png') }}"></a> {% else %} <a class="icon" title="Activer" href="{{ path('main_site_activelink', {'id' : lien.id}) }}"><img src="{{ asset('bundles/mainsite/images/unchecked.png') }}"></a> {% endif%} <br>
+					<a class="icon" title="Supprimer" href="{{ path('main_site_supprlink', {'id' : lien.id}) }}"><img src="{{ asset('bundles/mainsite/images/trash.png') }}"></a>
+				</p>
+				<p class="url-reel">
+					Lien : <a href="{{ lien.lienReel }}">{{ lien.lienReel }}</a>
+				</p>
+				<p class="url-short">
+					Shortcut : <span>http://smalink.org/{{ lien.lienSmall }}</span>
+				</p>
+				
+			</section>
+		</div>
+	</div>
+
+	<p class="consign">
+		Les tableaux de statistiques présents sur cette page sont calculés à partir des données des 14 derniers jours.
+	</p>
+
+	<div class="stats-link">
+		<p class="stats-demo">
+			<canvas id="statsDate" height="200" width="740"></canvas><br><br>
+			Clics / Date
+		</p>
+		<p class="stats-demo">
+			<canvas id="statsRef" height="200" width="338"></canvas><br><br>
+			Clics / Référant
+		</p>
+		<p class="stats-demo">
+			<canvas id="statsPays" height="200" width="338"></canvas><br><br>
+			Clics / Pays
+		</p>
+		<p class="more">
+			<a href="{{ path('main_site_stats') }}">voir les stats générales ➤</a>
+		</p>
+	</div>	
+	
+</section>
+{% endblock %}
+
+{% block javascripts %}
+	<script src="{{ asset('bundles/mainsite/js/Chart.js') }}"></script>
+	<script>
+		var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+		var lineChartData = {
+			labels : [{% for click in clickList %}"{{ click.date|date('d/m/y') }}"{% if not loop.last %},{% endif %}{% endfor %}],
+			datasets : [
+				{
+					label: "My Second dataset",
+					fillColor : "rgba(151,187,205,0.2)",
+					strokeColor : "rgba(151,187,205,1)",
+					pointColor : "rgba(151,187,205,1)",
+					pointStrokeColor : "#fff",
+					pointHighlightFill : "#fff",
+					pointHighlightStroke : "rgba(151,187,205,1)",
+					data : [{% for click in clickList %}{{ click.click }}{% if not loop.last %},{% endif %}{% endfor %}]
+				}
+			]
+
+		}
+
+		var color = [
+			{
+				color:"#F7464A",
+				highlight: "#FF5A5E"
+			},
+			{
+				color: "#46BFBD",
+				highlight: "#5AD3D1"
+			},
+			{
+				color: "#FDB45C",
+				highlight: "#FFC870"
+			},
+			{
+				color: "#949FB1",
+				highlight: "#A8B3C5"
+			},
+			{
+				color: "#4D5360",
+				highlight: "#616774"
+			},
+			{
+				color: "#97BBCD",
+				highlight: "#A3BDCB"
+			},
+			{
+				color: "#91CDA7",
+				highlight: "#9FD1B2"
+			},
+			{
+				color: "#C691CC",
+				highlight: "#CA9BD0"
+			}
+		]; 
+
+		var countryData = [
+			{% for country in countryList %}
+			{
+				value: {{ country.number }},
+				color: color[{{loop.index0 }}].color,
+				highlight: color[{{loop.index0 }}].highlight,
+				label: "{{ country.name }}"
+			}{% if not loop.last %},{% endif %}
+			{% endfor %}
+		];
+
+		var refData = [
+			{% for ref in refList %}
+			{
+				value: {{ ref.number }},
+				color: color[{{loop.index0 }}].color,
+				highlight: color[{{loop.index0 }}].highlight,
+				label: "{{ ref.name }}"
+			}{% if not loop.last %},{% endif %}
+			{% endfor %}
+		];
+
+		window.onload = function(){
+			window.myDoughnut = new Chart(document.getElementById("statsRef").getContext("2d")).Doughnut(refData, {responsive : false});
+			window.myLine = new Chart(document.getElementById("statsDate").getContext("2d")).Line(lineChartData, {responsive: false});
+			window.myPolarArea = new Chart(document.getElementById("statsPays").getContext("2d")).PolarArea(countryData, {responsive:false});
+		}
+
+	</script>
+{% endblock %}

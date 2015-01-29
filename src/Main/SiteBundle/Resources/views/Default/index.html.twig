@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Smalink - Raccourcisseur d'URL gratuit</title>
+        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/mainsite/css/index.css') }}">
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+        <div id="content">
+        	<header>
+	            <a href="{{ path('main_site_homepage') }}"><h1>Smalink.org</h1></a>
+	        </header>
+	        
+	        <section id="body">
+				<p>
+					Simple, beau et indépendant. Smalink.org est un service web accécible à tous. 
+				</p>
+				<p>
+					Utile pour tous les blogueurs et les amateurs de réseaux sociaux, Smalink raccourcis vos URLs <br>
+					pour vous permettre d'avoir une meilleure expérience du web. Ne soyez plus limité par les 140 <br>
+					caractères de Twitter et partager tout ce qui vous plait !
+				</p>
+				<p>
+					<a  class="btn co" href="{{ path('fos_user_security_login') }}">Connexion</a><a class="btn ins" href="{{ path('fos_user_registration_register') }}">Inscription</a>
+				</p>
+			</section>
+        </div>
+        
+        <footer>
+            © Copyright 2012-{{ "now"|date("Y") }} <a href="http://nathanaelcherrier.com/" >Nathanaël Cherrier</a> -- All right reserved
+        </footer>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>
+
+
