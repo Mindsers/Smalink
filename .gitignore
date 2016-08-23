@@ -4,4 +4,4 @@
 /app/logs/*
 /vendor/
 /app/config/parameters.yml
-/app/config/parametersbis.yml
+/app/config/parameters.yml.dist
