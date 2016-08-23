@@ -14,21 +14,20 @@ framework:
     validation:      { enable_annotations: true }
     templating:      { engines: ['twig'] } #assets_version: SomeVersionScheme
     default_locale:  "%locale%"
-    trust_proxy_headers: false # Deprecated in 2.0; will be removed in 2.3 (used trusted_proxies instead)
     trusted_proxies: ~
     session:         ~
 
 
 fos_user:
-    db_driver:     orm                         # Le type de BDD à utiliser, nous utilisons l'ORM Doctrine depuis le début
-    firewall_name: main                        # Le nom du firewall duquel on utilisera ces utilisateurs
-    user_class:    Main\UserBundle\Entity\User # La classe de l'entité User que nous venons de définir
+    db_driver:     orm 
+    firewall_name: main
+    user_class:    Main\UserBundle\Entity\User
     service:
         mailer: fos_user.mailer.twig_swift
     registration:
         confirmation:
             enabled: true
-            from_email: 
+            from_email:
                 address: noreply@nathanaelcherrier.com
                 sender_name: "SmallLink Registration Service"
             template: MainUserBundle:User:registration.email.twig
@@ -75,4 +74,3 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
-
