@@ -9,16 +9,15 @@ use Leg\GoogleChartsBundle\Charts\Gallery\LineChart;
 use Leg\GoogleChartsBundle\Charts\Gallery\PieChart;
 use Leg\GoogleChartsBundle\Charts\Gallery\BarChart;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use JMS\SecurityExtraBundle\Annotation\Secure;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Main\SiteBundle\Entity\Link;
 use Main\SiteBundle\Entity\Click;
-
 
 class DefaultController extends Controller
 {
 
     public function indexAction()
-    {   
+    {
         if ($this->get('security.context')->isGranted('ROLE_USER')) {
             return $this->redirect($this->generateUrl('main_site_dashboard'));
         }
@@ -26,11 +25,10 @@ class DefaultController extends Controller
         return $this->render('MainSiteBundle:Default:index.html.twig');
     }
 
-    /**
-     * @Secure(roles="ROLE_USER")
-     */
     public function dashboardAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $linkRepo = $this->getDoctrine()
                          ->getManager()
                          ->getRepository('MainSiteBundle:Link');
@@ -39,7 +37,7 @@ class DefaultController extends Controller
                           ->getRepository('MainSiteBundle:Click');
 
         /* Trois derniers liens */
-        $listeliens = $linkRepo->findby(array('author' => $this->container->get('security.context')->getToken()->getUser()), 
+        $listeliens = $linkRepo->findby(array('author' => $this->container->get('security.context')->getToken()->getUser()),
              array('date' => 'DESC'), 3);
 
         /* Stats resumée */
@@ -70,27 +68,26 @@ class DefaultController extends Controller
 
           $lien->setLienSmall(randomLinkSufixe(6));
           $lien->setActivate(true);
-     
+
           if ($form->isValid()) {
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($lien);
             $em->flush();
-     
+
             return $this->redirect($this->generateUrl('main_site_dashboard'));
           }
         }
 
-        
+
         return $this->render('MainSiteBundle:Default:dashboard.html.twig', array(
         'form' => $form->createView(), 'liens' => $listeliens, 'nombreLiens' => $nbLien, 'nombreClick' => $nbClick));
     }
 
-    /**
-     * @Secure(roles="ROLE_USER")
-     */
     public function newLinkAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
     	$lien = new Link();
 
     	$user = $this->container->get('security.context')->getToken()->getUser();
@@ -111,13 +108,13 @@ class DefaultController extends Controller
 
 	      $lien->setLienSmall(randomLinkSufixe(6));
 	      $lien->setActivate(true);
-	 
+
 	      if ($form->isValid()) {
 
 	        $em = $this->getDoctrine()->getManager();
 	        $em->persist($lien);
 	        $em->flush();
-	 
+
 	        return $this->redirect($this->generateUrl('main_site_links'));
 	      }
 	    }
@@ -127,11 +124,10 @@ class DefaultController extends Controller
 		  ));
     }
 
-    /**
-     * @Secure(roles="ROLE_USER")
-     */
     public function allLinksAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
     	$repository = $this->getDoctrine()
                      ->getManager()
                      ->getRepository('MainSiteBundle:Link');
@@ -141,30 +137,27 @@ class DefaultController extends Controller
     	return $this->render('MainSiteBundle:Default:links.html.twig', array('liens' => $liens));
     }
 
-    /**
-     * @Secure(roles="ROLE_USER")
-     */
     public function supprLinkAction(Link $lien)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         if ($lien->getAuthor() == $this->container->get('security.context')->getToken()->getUser()) {
             $this->getDoctrine()->getEntityManager()->remove($lien);
             $this->getDoctrine()->getEntityManager()->flush();
         } else {
            return $this->render('MainSiteBundle:Default:index.html.twig');
         }
-        
+
         $this->getDoctrine()->getEntityManager()->remove($lien);
         $this->getDoctrine()->getEntityManager()->flush();
 
         return $this->redirect($this->get('request')->headers->get('referer'));
     }
 
-    /**
-     * @Secure(roles="ROLE_USER")
-     */
     public function activeLinkAction(Link $lien)
     {
-        
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         switch ($lien->getActivate()) {
             case false:
                 if ($lien->getAuthor() == $this->container->get('security.context')->getToken()->getUser()) {
@@ -178,7 +171,7 @@ class DefaultController extends Controller
                     $this->getDoctrine()->getEntityManager()->flush();
                 }
                 break;
-            
+
             default:
                 if ($lien->getAuthor() == $this->container->get('security.context')->getToken()->getUser()) {
                     $lien->setActivate(true);
@@ -190,11 +183,10 @@ class DefaultController extends Controller
         return $this->redirect($this->get('request')->headers->get('referer'));
     }
 
-    /**
-     * @Secure(roles="ROLE_USER")
-     */
     public function statsAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $linkRepo = $this->getDoctrine()
                          ->getManager()
                          ->getRepository('MainSiteBundle:Link');
@@ -279,12 +271,12 @@ class DefaultController extends Controller
                     case '12':
                         $dece = $dece + 1;
                         break;
-                    
+
                     default:
                         # code...
                         break;
                 }
-            }elseif ($clicks->getDate()->format('Y') == ($annee-1)) {
+            } elseif ($clicks->getDate()->format('Y') == ($annee-1)) {
                 switch ($clicks->getDate()->format('m')) {
                     case '01':
                         $janv_ = $janv_ + 1;
@@ -322,7 +314,7 @@ class DefaultController extends Controller
                     case '12':
                         $dece_ = $dece_ + 1;
                         break;
-                    
+
                     default:
                         # code...
                         break;
@@ -345,10 +337,9 @@ class DefaultController extends Controller
     	return $this->render('MainSiteBundle:Default:stats.html.twig', array('nombreLiens' => $nbLien, 'nombreClick' => $nbClick, 'clickThisYear' => $nbClickCurrentYear, 'clickPrecedentYear' => $nbClickPrecedentYear, 'refThisYear' => $listeRefCurrentYear, 'refPrecedentYear' => $listeRefPrecedentYear, 'countryThisYear' => $listeCountryCurrentYear, 'countryPrecedentYear' => $listeCountryPrecedentYear));
     }
 
-    /**
-     * @Secure(roles="ROLE_USER")
-     */
     public function linkInfoAction($id){
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $linkRepo = $this->getDoctrine()
                          ->getManager()
                          ->getRepository('MainSiteBundle:Link');
@@ -377,10 +368,10 @@ class DefaultController extends Controller
 
         if (end($listClick)) {
             $endDate = end($listClick)->getDate();
-        }else{
+        } else {
             $endDate = new \Datetime('now');
         }
-        
+
         foreach ($listClick as $key => $click) { // detection de la plus ancienne date de click
             if ($datetmp > $click->getDate()) {
                 $datetmp = $click->getDate();
@@ -427,16 +418,16 @@ class DefaultController extends Controller
         $lien = $repository->findOneBy(array('lien_small' => $short));
 
         if (is_object($lien)) {
-            if($lien->getActivate()){
+            if ($lien->getActivate()) {
 
                 $countryUser = file_get_contents("http://api.hostip.info/country.php?ip=".$_SERVER['REMOTE_ADDR']);
                 $referrerUrl = parse_url($this->get('request')->headers->get('referer'), PHP_URL_HOST);
 
-                if($referrerUrl == NULL) {
+                if ($referrerUrl == null) {
                     $referrerUrl = "Direct";
                 }
-                
-                if($countryUser == "XX"){
+
+                if ($countryUser == "XX") {
                     $countryUser = "Inconnu";
                 }
 
@@ -450,14 +441,14 @@ class DefaultController extends Controller
                 $this->getDoctrine()->getEntityManager()->flush();
 
                 return $this->redirect($lien->getLienReel());
-            }else{
+            } else {
                 return $this->render('MainSiteBundle:Default:falselink.html.twig');
             }
-        	
-        }else {
+
+        } else {
         	return $this->render('MainSiteBundle:Default:nolink.html.twig');
-        }  
-        
+        }
+
     }
 
 }
