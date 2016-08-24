@@ -37,11 +37,16 @@ class DefaultController extends Controller
                           ->getRepository('MainSiteBundle:Click');
 
         /* Trois derniers liens */
-        $listeliens = $linkRepo->findby(array('author' => $this->container->get('security.context')->getToken()->getUser()),
-             array('date' => 'DESC'), 3);
+        $listeliens = $linkRepo->findby(
+            array('author' => $this->container->get('security.context')->getToken()->getUser()),
+            array('date' => 'DESC'),
+            3
+        );
 
         /* Stats resumée */
-        $listeLiensComplete = $linkRepo->findBy(array('author' => $this->container->get('security.context')->getToken()->getUser()));
+        $listeLiensComplete = $linkRepo->findBy(
+            array('author' => $this->container->get('security.context')->getToken()->getUser())
+        );
         $nbLien = count($listeLiensComplete);
 
         $listeClicksComplete = $clickRepo->findBy(array('link' => $listeLiensComplete));
@@ -64,19 +69,18 @@ class DefaultController extends Controller
         $request = $this->get('request');
 
         if ($request->getMethod() == 'POST') {
-          $form->bind($request);
+            $form->bind($request);
 
-          $lien->setLienSmall(randomLinkSufixe(6));
-          $lien->setActivate(true);
+            $lien->setLienSmall(randomLinkSufixe(6));
+            $lien->setActivate(true);
 
-          if ($form->isValid()) {
+            if ($form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($lien);
+                $em->flush();
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($lien);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('main_site_dashboard'));
-          }
+                return $this->redirect($this->generateUrl('main_site_dashboard'));
+            }
         }
 
 
@@ -88,53 +92,55 @@ class DefaultController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
-    	$lien = new Link();
+        $lien = new Link();
 
-    	$user = $this->container->get('security.context')->getToken()->getUser();
-    	$lien->setAuthor($user);
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        $lien->setAuthor($user);
 
-    	$formBuilder = $this->createFormBuilder($lien);
+        $formBuilder = $this->createFormBuilder($lien);
 
-    	$formBuilder
-		    ->add('name', 'text', array('attr'=> array('placeholder' => 'Etiquette')))
-		    ->add('lien_reel', 'text', array('attr'=> array('placeholder' => 'Lien à raccourcir')));
+        $formBuilder
+            ->add('name', 'text', array('attr'=> array('placeholder' => 'Etiquette')))
+            ->add('lien_reel', 'text', array('attr'=> array('placeholder' => 'Lien à raccourcir')));
 
-		$form = $formBuilder->getForm();
+        $form = $formBuilder->getForm();
 
-		$request = $this->get('request');
+        $request = $this->get('request');
 
-		if ($request->getMethod() == 'POST') {
-	      $form->bind($request);
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
 
-	      $lien->setLienSmall(randomLinkSufixe(6));
-	      $lien->setActivate(true);
+            $lien->setLienSmall(randomLinkSufixe(6));
+            $lien->setActivate(true);
 
-	      if ($form->isValid()) {
+            if ($form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($lien);
+                $em->flush();
 
-	        $em = $this->getDoctrine()->getManager();
-	        $em->persist($lien);
-	        $em->flush();
+                return $this->redirect($this->generateUrl('main_site_links'));
+            }
+        }
 
-	        return $this->redirect($this->generateUrl('main_site_links'));
-	      }
-	    }
-
-    	return $this->render('MainSiteBundle:Default:new.html.twig', array(
-		    'form' => $form->createView(),
-		  ));
+        return $this->render('MainSiteBundle:Default:new.html.twig', array(
+        'form' => $form->createView(),
+        ));
     }
 
     public function allLinksAction()
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
-    	$repository = $this->getDoctrine()
+        $repository = $this->getDoctrine()
                      ->getManager()
                      ->getRepository('MainSiteBundle:Link');
 
-        $liens = $repository->findby(array('author' => $this->container->get('security.context')->getToken()->getUser()), array('date' => 'DESC'));
+        $liens = $repository->findby(
+            array('author' => $this->container->get('security.context')->getToken()->getUser()),
+            array('date' => 'DESC')
+        );
 
-    	return $this->render('MainSiteBundle:Default:links.html.twig', array('liens' => $liens));
+        return $this->render('MainSiteBundle:Default:links.html.twig', array('liens' => $liens));
     }
 
     public function supprLinkAction(Link $lien)
@@ -145,7 +151,7 @@ class DefaultController extends Controller
             $this->getDoctrine()->getEntityManager()->remove($lien);
             $this->getDoctrine()->getEntityManager()->flush();
         } else {
-           return $this->render('MainSiteBundle:Default:index.html.twig');
+            return $this->render('MainSiteBundle:Default:index.html.twig');
         }
 
         $this->getDoctrine()->getEntityManager()->remove($lien);
@@ -195,7 +201,9 @@ class DefaultController extends Controller
                           ->getRepository('MainSiteBundle:Click');
 
         /* Stats resumée */
-        $listeLiensComplete = $linkRepo->findBy(array('author' => $this->container->get('security.context')->getToken()->getUser()));
+        $listeLiensComplete = $linkRepo->findBy(array(
+            'author' => $this->container->get('security.context')->getToken()->getUser()
+        ));
         $nbLien = count($listeLiensComplete);
 
         $listeClicksComplete = $clickRepo->findBy(array('link' => $listeLiensComplete));
@@ -316,14 +324,39 @@ class DefaultController extends Controller
                         break;
 
                     default:
-                        # code...
                         break;
                 }
             }
         }
 
-        $nbClickCurrentYear = array($janv, $fevr, $mars, $avri, $mai, $juin, $juil, $aout, $sept, $octo, $nove, $dece);
-        $nbClickPrecedentYear = array($janv_, $fevr_, $mars_, $avri_, $mai_, $juin_, $juil_, $aout_, $sept_, $octo_, $nove_, $dece_);
+        $nbClickCurrentYear = array(
+            $janv,
+            $fevr,
+            $mars,
+            $avri,
+            $mai,
+            $juin,
+            $juil,
+            $aout,
+            $sept,
+            $octo,
+            $nove,
+            $dece
+        );
+        $nbClickPrecedentYear = array(
+            $janv_,
+            $fevr_,
+            $mars_,
+            $avri_,
+            $mai_,
+            $juin_,
+            $juil_,
+            $aout_,
+            $sept_,
+            $octo_,
+            $nove_,
+            $dece_
+        );
 
         // Graphe Click / Référant
         $listeRefCurrentYear = $clickRepo->findDistByYear('referrer', $annee, 3);
@@ -334,10 +367,23 @@ class DefaultController extends Controller
         $listeCountryPrecedentYear = $clickRepo->findDistByYear('country', $annee-1, 3);
 
 
-    	return $this->render('MainSiteBundle:Default:stats.html.twig', array('nombreLiens' => $nbLien, 'nombreClick' => $nbClick, 'clickThisYear' => $nbClickCurrentYear, 'clickPrecedentYear' => $nbClickPrecedentYear, 'refThisYear' => $listeRefCurrentYear, 'refPrecedentYear' => $listeRefPrecedentYear, 'countryThisYear' => $listeCountryCurrentYear, 'countryPrecedentYear' => $listeCountryPrecedentYear));
+        return $this->render(
+            'MainSiteBundle:Default:stats.html.twig',
+            array(
+                'nombreLiens' => $nbLien,
+                'nombreClick' => $nbClick,
+                'clickThisYear' => $nbClickCurrentYear,
+                'clickPrecedentYear' => $nbClickPrecedentYear,
+                'refThisYear' => $listeRefCurrentYear,
+                'refPrecedentYear' => $listeRefPrecedentYear,
+                'countryThisYear' => $listeCountryCurrentYear,
+                'countryPrecedentYear' => $listeCountryPrecedentYear
+            )
+        );
     }
 
-    public function linkInfoAction($id){
+    public function linkInfoAction($id)
+    {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         $linkRepo = $this->getDoctrine()
@@ -350,8 +396,10 @@ class DefaultController extends Controller
         // Lien
         $link = $linkRepo->find($id);
 
-        /* Stats resumée */
-        $listeLiensComplete = $linkRepo->findBy(array('author' => $this->container->get('security.context')->getToken()->getUser()));
+        // Stats resumée
+        $listeLiensComplete = $linkRepo->findBy(array(
+            'author' => $this->container->get('security.context')->getToken()->getUser()
+        ));
         $nbLien = count($listeLiensComplete);
 
         $listeClicksComplete = $clickRepo->findBy(array('link' => $listeLiensComplete));
@@ -395,8 +443,9 @@ class DefaultController extends Controller
         $endDate->sub(new \DateInterval('P1D'));
 
         foreach ($listClick as $key => $click) {
-            if (isset($date_array[$click->getDate()->format('Y-m-d')])) {
-                $date_array[$click->getDate()->format('Y-m-d')]['click'] = $date_array[$click->getDate()->format('Y-m-d')]['click'] + 1;
+            $dateFormated = $click->getDate()->format('Y-m-d');
+            if (isset($date_array[$dateFormated])) {
+                $date_array[$dateFormated]['click'] = $date_array[$dateFormated]['click'] + 1;
             }
         }
 
@@ -406,12 +455,20 @@ class DefaultController extends Controller
         // Graphe Click / Référant
         $listeCountry = $clickRepo->findDistCountryByLink($id, 7);
 
-        return $this->render('MainSiteBundle:Default:statsLink.html.twig', array('lien'=>$link, 'clickList' => $date_array, 'refList' => $listeRef, 'countryList' => $listeCountry,));
+        return $this->render(
+            'MainSiteBundle:Default:statsLink.html.twig',
+            array(
+                'lien'=>$link,
+                'clickList' => $date_array,
+                'refList' => $listeRef,
+                'countryList' => $listeCountry
+            )
+        );
     }
 
     public function shortenerAction($short)
     {
-    	$repository = $this->getDoctrine()
+        $repository = $this->getDoctrine()
                      ->getManager()
                      ->getRepository('MainSiteBundle:Link');
 
@@ -419,8 +476,10 @@ class DefaultController extends Controller
 
         if (is_object($lien)) {
             if ($lien->getActivate()) {
-
-                $countryUser = file_get_contents("http://api.hostip.info/country.php?ip=".$_SERVER['REMOTE_ADDR']);
+                $countryUser = json_decode(file_get_contents(
+                    "http://ipinfo.io/" . $this->container->get('request')->getClientIp()
+                ));
+                $countryUser = $countryUser->country;
                 $referrerUrl = parse_url($this->get('request')->headers->get('referer'), PHP_URL_HOST);
 
                 if ($referrerUrl == null) {
@@ -444,23 +503,21 @@ class DefaultController extends Controller
             } else {
                 return $this->render('MainSiteBundle:Default:falselink.html.twig');
             }
-
         } else {
-        	return $this->render('MainSiteBundle:Default:nolink.html.twig');
+            return $this->render('MainSiteBundle:Default:nolink.html.twig');
         }
-
     }
-
 }
 
-function randomLinkSufixe($length) {
-	$linkSufixe = "";
-	$alpha = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNpPqQrRsStTuUvVwWxXyYzZ";
-	srand((double)microtime()*1000000);
+function randomLinkSufixe($length)
+{
+    $linkSufixe = "";
+    $alpha = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNpPqQrRsStTuUvVwWxXyYzZ";
+    srand((double)microtime()*1000000);
 
-	for($i=0; $i<$length; $i++) {
-		$linkSufixe .= $alpha[rand()%strlen($alpha)];
-	}
+    for ($i=0; $i<$length; $i++) {
+        $linkSufixe .= $alpha[rand()%strlen($alpha)];
+    }
 
-	return $linkSufixe;
+    return $linkSufixe;
 }
