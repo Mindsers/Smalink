@@ -33,8 +33,7 @@ main_site_links:
 main_site_getlink:
     pattern:  /links/{id}
     defaults: { _controller: MainSiteBundle:Default:linkInfo, id: 0 }
-    requirements:
-        id: \d+
+    requirements: { 'id': '\d+' }
 
 main_site_newlink:
     pattern:  /links/create
@@ -43,14 +42,12 @@ main_site_newlink:
 main_site_supprlink:
     pattern:  /links/delete/{id}
     defaults: { _controller: MainSiteBundle:Default:supprLink }
-    requirements:
-        id: \d+
+    requirements: { 'id': '\d+' }
 
 main_site_activelink:
     pattern:  /links/activate/{id}
     defaults: { _controller: MainSiteBundle:Default:activeLink }
-    requirements:
-        id: \d+
+    requirements: { 'id': '\d+' }
 
 
 
