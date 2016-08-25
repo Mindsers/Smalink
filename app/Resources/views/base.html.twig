@@ -12,13 +12,14 @@
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     </head>
     <body>
-        
+
         <header>
         {% block header %}
+            {% if foo.bar is defined %}
             <div class="menu">
                 <p>
-                    <a class="start-menu" href="#">{{app.user.username}}</a>   
-                    
+                    <a class="start-menu" href="#">{{app.user.username}}</a>
+
                     {# <div>
                         <ul>
                             <li>Nouveau lien</li>
@@ -31,10 +32,11 @@
                     <a href="{{ path('fos_user_security_login') }}"><img src="{{ asset('bundles/mainsite/images/off.png') }}"></a>
                 </p>
             </div>
+            {% endif %}
             <a href="{{ path('main_site_dashboard') }}"><h1>Smalink.org</h1></a>
         {% endblock %}
         </header>
-        
+
         {% block body %}{% endblock %}
         <footer>
             © Copyright 2012-{{ "now"|date("Y") }} <a href="http://nathanaelcherrier.com/" >Nathanaël Cherrier</a> -- All right reserved
@@ -42,4 +44,3 @@
         {% block javascripts %}{% endblock %}
     </body>
 </html>
- 
