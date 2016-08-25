@@ -17,7 +17,8 @@
 			Clics
 		</p>
 		<p class="stats-demo">
-			<span class="value">{{ (nombreClick / nombreLiens)|number_format(2, '.', ',') }}</span><br>
+
+			<span class="value">{% if nombreLiens == 0 %}0{% else %}{{ (nombreClick / nombreLiens)|number_format(2, '.', ',') }}{% endif %}</span><br>
 			Clics / Lien
 		</p>
 		<p class="stats-demo">
@@ -37,7 +38,7 @@
 			Les courbes bleues représentent les valeurs de l'année en cours. Les courbes grises représentent les valeurs de l'année précédente.
 		</p>
 	</div>
-	
+
 </section>
 {% endblock %}
 

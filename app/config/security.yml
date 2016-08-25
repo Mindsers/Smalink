@@ -1,6 +1,6 @@
 security:
     encoders:
-        "FOS\UserBundle\Model\UserInterface": sha512
+        FOS\UserBundle\Model\UserInterface: bcrypt
 
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
@@ -8,7 +8,7 @@ security:
 
     providers:
         fos_userbundle:
-            id: fos_user.user_manager
+            id: fos_user.user_provider.username
 
     firewalls:
         dev:
@@ -17,26 +17,15 @@ security:
 
         # Firewall pour les pages de connexion, inscription, et récupération de mot de passe
         login:
-            pattern:   ^/(login$|register|resetting)  # Les adresses de ces pages sont login, register et resetting
-            anonymous: true                           # On autorise bien évidemment les anonymes sur ces pages !
+            pattern:   ^/(login$|register|resetting)
+            anonymous: true
 
         # Firewall principal pour le reste de notre site
         main:
-            pattern: ^/                      # ^/ = tout ce qui commence par / = tout notre site
-            form_login:                      # On définit notre méthode d'authentification
-                csrf_provider: form.csrf_provider
-                provider:    fos_userbundle  # On lit l'authentification au provider définit plus haut
-                remember_me: true            # On active la possibilité du "Se souvenir de moi" (désactivé par défaut)
+            pattern: ^/
+            form_login:
+                provider:    fos_userbundle
+                csrf_token_generator: security.csrf.token_manager
                 default_target_path: /dashboard
-            remember_me:
-                key:         %secret%        # On définit la clé pour le remember_me (%secret% est un parametre de parameters.ini)
-            anonymous:       true            # On autorise les utilisateurs anonymes (non identifiés)
-            logout:          true            # On autorise la déconnexion manuelle (désactivé par défaut)
-
-    access_control:
-        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #
-        # You must uncomment the two following rules to restrict access to paths
-        # starting with the /_internal prefix to only localhost
-        #- { path: ^/_internal/secure, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }
-        #- { path: ^/_internal/secure, roles: ROLE_NO_ACCESS }
+            anonymous:       true
+            logout:          true

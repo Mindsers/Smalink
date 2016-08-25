@@ -1,51 +1,51 @@
 main_site_homepage:
-    pattern:  /
+    path:  /
     defaults: { _controller: MainSiteBundle:Default:index }
 
 main_site_stats:
-    pattern:  /stats
+    path:  /stats
     defaults: { _controller: MainSiteBundle:Default:stats }
 
 
 
 google_charts_pie:
-    pattern:  /pieChart/{id}
+    path:  /pieChart/{id}
     defaults: { _controller: MainSiteBundle:Default:pie }
 
 google_charts_pie3D:
-    pattern:  /pie3DChart/{id}
+    path:  /pie3DChart/{id}
     defaults: { _controller: MainSiteBundle:Default:pie3D }
 
 google_charts_bar:
-    pattern:  /barChart/{id}
+    path:  /barChart/{id}
     defaults: { _controller: MainSiteBundle:Default:bar }
 
 
 
 main_site_dashboard:
-    pattern:  /dashboard
+    path:  /dashboard
     defaults: { _controller: MainSiteBundle:Default:dashboard }
 
 main_site_links:
-    pattern:  /links
+    path:  /links
     defaults: { _controller: MainSiteBundle:Default:allLinks }
 
 main_site_getlink:
-    pattern:  /links/{id}
+    path:  /links/{id}
     defaults: { _controller: MainSiteBundle:Default:linkInfo, id: 0 }
     requirements: { 'id': '\d+' }
 
 main_site_newlink:
-    pattern:  /links/create
+    path:  /links/create
     defaults: { _controller: MainSiteBundle:Default:newLink }
 
 main_site_supprlink:
-    pattern:  /links/delete/{id}
+    path:  /links/delete/{id}
     defaults: { _controller: MainSiteBundle:Default:supprLink }
     requirements: { 'id': '\d+' }
 
 main_site_activelink:
-    pattern:  /links/activate/{id}
+    path:  /links/activate/{id}
     defaults: { _controller: MainSiteBundle:Default:activeLink }
     requirements: { 'id': '\d+' }
 
@@ -53,5 +53,5 @@ main_site_activelink:
 
 
 main_site_shortener:
-    pattern:  /{short}
+    path:  /{short}
     defaults: { _controller: MainSiteBundle:Default:shortener }

@@ -10,6 +10,8 @@ use Leg\GoogleChartsBundle\Charts\Gallery\PieChart;
 use Leg\GoogleChartsBundle\Charts\Gallery\BarChart;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\Request;
 use Main\SiteBundle\Entity\Link;
 use Main\SiteBundle\Entity\Click;
 
@@ -18,14 +20,14 @@ class DefaultController extends Controller
 
     public function indexAction()
     {
-        if ($this->get('security.context')->isGranted('ROLE_USER')) {
-            return $this->redirect($this->generateUrl('main_site_dashboard'));
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('main_site_dashboard');
         }
 
         return $this->render('MainSiteBundle:Default:index.html.twig');
     }
 
-    public function dashboardAction()
+    public function dashboardAction(Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
@@ -38,14 +40,14 @@ class DefaultController extends Controller
 
         /* Trois derniers liens */
         $listeliens = $linkRepo->findby(
-            array('author' => $this->container->get('security.context')->getToken()->getUser()),
+            array('author' => $this->container->get('security.token_storage')->getToken()->getUser()),
             array('date' => 'DESC'),
             3
         );
 
         /* Stats resumée */
         $listeLiensComplete = $linkRepo->findBy(
-            array('author' => $this->container->get('security.context')->getToken()->getUser())
+            array('author' => $this->container->get('security.token_storage')->getToken()->getUser())
         );
         $nbLien = count($listeLiensComplete);
 
@@ -55,21 +57,19 @@ class DefaultController extends Controller
         /* Nouveau lien */
         $lien = new Link();
 
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $lien->setAuthor($user);
 
         $formBuilder = $this->createFormBuilder($lien);
 
         $formBuilder
-            ->add('name', 'text', array('attr'=> array('placeholder' => 'Etiquette')))
-            ->add('lien_reel', 'text', array('attr'=> array('placeholder' => 'Lien à raccourcir')));
+            ->add('name', TextType::class, array('attr'=> array('placeholder' => 'Etiquette')))
+            ->add('lien_reel', TextType::class, array('attr'=> array('placeholder' => 'Lien à raccourcir')));
 
         $form = $formBuilder->getForm();
 
-        $request = $this->get('request');
-
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
+            $form->handleRequest($request);
 
             $lien->setLienSmall(randomLinkSufixe(6));
             $lien->setActivate(true);
@@ -79,7 +79,7 @@ class DefaultController extends Controller
                 $em->persist($lien);
                 $em->flush();
 
-                return $this->redirect($this->generateUrl('main_site_dashboard'));
+                return $this->redirectToRoute('main_site_dashboard');
             }
         }
 
@@ -88,27 +88,25 @@ class DefaultController extends Controller
         'form' => $form->createView(), 'liens' => $listeliens, 'nombreLiens' => $nbLien, 'nombreClick' => $nbClick));
     }
 
-    public function newLinkAction()
+    public function newLinkAction(Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         $lien = new Link();
 
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $lien->setAuthor($user);
 
         $formBuilder = $this->createFormBuilder($lien);
 
         $formBuilder
-            ->add('name', 'text', array('attr'=> array('placeholder' => 'Etiquette')))
-            ->add('lien_reel', 'text', array('attr'=> array('placeholder' => 'Lien à raccourcir')));
+            ->add('name', TextType::class, array('attr'=> array('placeholder' => 'Etiquette')))
+            ->add('lien_reel', TextType::class, array('attr'=> array('placeholder' => 'Lien à raccourcir')));
 
         $form = $formBuilder->getForm();
 
-        $request = $this->get('request');
-
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
+            $form->handleRequest($request);
 
             $lien->setLienSmall(randomLinkSufixe(6));
             $lien->setActivate(true);
@@ -118,7 +116,7 @@ class DefaultController extends Controller
                 $em->persist($lien);
                 $em->flush();
 
-                return $this->redirect($this->generateUrl('main_site_links'));
+                return $this->redirectToRoute('main_site_links');
             }
         }
 
@@ -136,7 +134,7 @@ class DefaultController extends Controller
                      ->getRepository('MainSiteBundle:Link');
 
         $liens = $repository->findby(
-            array('author' => $this->container->get('security.context')->getToken()->getUser()),
+            array('author' => $this->container->get('security.token_storage')->getToken()->getUser()),
             array('date' => 'DESC')
         );
 
@@ -147,7 +145,7 @@ class DefaultController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
-        if ($lien->getAuthor() == $this->container->get('security.context')->getToken()->getUser()) {
+        if ($lien->getAuthor() == $this->container->get('security.token_storage')->getToken()->getUser()) {
             $this->getDoctrine()->getEntityManager()->remove($lien);
             $this->getDoctrine()->getEntityManager()->flush();
         } else {
@@ -157,7 +155,7 @@ class DefaultController extends Controller
         $this->getDoctrine()->getEntityManager()->remove($lien);
         $this->getDoctrine()->getEntityManager()->flush();
 
-        return $this->redirect($this->get('request')->headers->get('referer'));
+        return $this->redirect($this->container->get('request_stack')->getCurrentRequest()->headers->get('referer'));
     }
 
     public function activeLinkAction(Link $lien)
@@ -166,27 +164,27 @@ class DefaultController extends Controller
 
         switch ($lien->getActivate()) {
             case false:
-                if ($lien->getAuthor() == $this->container->get('security.context')->getToken()->getUser()) {
+                if ($lien->getAuthor() == $this->container->get('security.token_storage')->getToken()->getUser()) {
                     $lien->setActivate(true);
                     $this->getDoctrine()->getEntityManager()->flush();
                 }
                 break;
             case true:
-                if ($lien->getAuthor() == $this->container->get('security.context')->getToken()->getUser()) {
+                if ($lien->getAuthor() == $this->container->get('security.token_storage')->getToken()->getUser()) {
                     $lien->setActivate(false);
                     $this->getDoctrine()->getEntityManager()->flush();
                 }
                 break;
 
             default:
-                if ($lien->getAuthor() == $this->container->get('security.context')->getToken()->getUser()) {
+                if ($lien->getAuthor() == $this->container->get('security.token_storage')->getToken()->getUser()) {
                     $lien->setActivate(true);
                     $this->getDoctrine()->getEntityManager()->flush();
                 }
                 break;
         }
 
-        return $this->redirect($this->get('request')->headers->get('referer'));
+        return $this->redirect($this->container->get('request_stack')->getCurrentRequest()->headers->get('referer'));
     }
 
     public function statsAction()
@@ -202,7 +200,7 @@ class DefaultController extends Controller
 
         /* Stats resumée */
         $listeLiensComplete = $linkRepo->findBy(array(
-            'author' => $this->container->get('security.context')->getToken()->getUser()
+            'author' => $this->container->get('security.token_storage')->getToken()->getUser()
         ));
         $nbLien = count($listeLiensComplete);
 
@@ -398,7 +396,7 @@ class DefaultController extends Controller
 
         // Stats resumée
         $listeLiensComplete = $linkRepo->findBy(array(
-            'author' => $this->container->get('security.context')->getToken()->getUser()
+            'author' => $this->container->get('security.token_storage')->getToken()->getUser()
         ));
         $nbLien = count($listeLiensComplete);
 
@@ -477,10 +475,10 @@ class DefaultController extends Controller
         if (is_object($lien)) {
             if ($lien->getActivate()) {
                 $countryUser = json_decode(file_get_contents(
-                    "http://ipinfo.io/" . $this->container->get('request')->getClientIp()
+                    "http://ipinfo.io/" . $this->container->get('request_stack')->getCurrentRequest()->getClientIp()
                 ));
                 $countryUser = $countryUser->country;
-                $referrerUrl = parse_url($this->get('request')->headers->get('referer'), PHP_URL_HOST);
+                $referrerUrl = parse_url($this->get('request_stack')->getCurrentRequest()->headers->get('referer'), PHP_URL_HOST);
 
                 if ($referrerUrl == null) {
                     $referrerUrl = "Direct";
