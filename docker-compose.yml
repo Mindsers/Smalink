@@ -6,16 +6,16 @@ services:
     ports:
       - 8080:80
     volumes:
-      - ./:/var/www/smalink
-      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./:/var/www/smalink:ro
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     links:
       - fpm
 
   fpm:
     build: docker/php/
     volumes:
-      - ./:/var/www/smalink
-      - ./docker/php/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
+      - ./:/var/www/smalink:rw
+      - ./docker/php/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini:ro
     links:
       - mysql
 
