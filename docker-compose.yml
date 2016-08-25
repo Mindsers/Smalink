@@ -1,5 +1,30 @@
-version: 2
+version: '2'
 
 services:
   nginx:
     image: nginx:latest
+    ports:
+      - 8087:80
+    volumes:
+      - ./:/var/www/smalink
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    links:
+      - fpm
+
+  fpm:
+    build: docker/php/
+    volumes:
+      - ./:/var/www/smalink
+      - ./docker/php/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
+    links:
+      - mysql
+
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: smalink
+      MYSQL_USER: smalinku
+      MYSQL_PASSWORD: smalinkp
+      MYSQL_ROOT_PASSWORD: toor
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql
