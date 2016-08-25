@@ -27,6 +27,8 @@
         "symfony/phpunit-bridge": "^3.0"
     },
     "scripts": {
+        "up-prod": "docker-compose up -d --build -f docker-compose.yml -f docker-compose.prod.yml",
+        "up-dev": "docker-compose up -d --build",
         "symfony-scripts": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
