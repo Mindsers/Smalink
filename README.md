@@ -1,7 +1,7 @@
 Smalink.org
 ========================
 
-Url shortener based on Symfony2
+Url shortener based on Symfony3
 
 ## Links
 To test and use go on the [website](http://smalink.org)
