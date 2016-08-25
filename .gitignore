@@ -9,6 +9,6 @@
 /app/phpunit.xml
 /build/
 /vendor/
-!/vendor/bundles/
+!/vendor/bundles/*
 /bin/
 /composer.phar
