@@ -478,7 +478,10 @@ class DefaultController extends Controller
                     "http://ipinfo.io/" . $this->container->get('request_stack')->getCurrentRequest()->getClientIp()
                 ));
                 $countryUser = $countryUser->country;
-                $referrerUrl = parse_url($this->get('request_stack')->getCurrentRequest()->headers->get('referer'), PHP_URL_HOST);
+                $referrerUrl = parse_url(
+                    $this->get('request_stack')->getCurrentRequest()->headers->get('referer'),
+                    PHP_URL_HOST
+                );
 
                 if ($referrerUrl == null) {
                     $referrerUrl = "Direct";
