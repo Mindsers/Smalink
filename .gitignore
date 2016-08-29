@@ -2,14 +2,13 @@
 /app/bootstrap.php.cache
 /app/cache/*
 /app/config/parameters.yml
-/app/config/parameters.yml.dist
 /app/logs/*
 !app/cache/.gitkeep
 !app/logs/.gitkeep
 /app/phpunit.xml
 /build/
 /vendor/
-!vendor/bundles
+!vendor/bundles/
 /bin/
 /composer.phar
 /docker/mysql/data/*
