@@ -13,3 +13,5 @@ RUN apt-get autoclean && apt-get autoremove
 
 RUN docker-php-ext-install pdo pdo_mysql
 RUN docker-php-ext-enable opcache
+
+WORKDIR /var/www/smalink 
