@@ -6,6 +6,10 @@ before_script:
 
 build_smalink:
   stage: build
+  cache:
+    paths:
+      - docker/mysql/data/
+      - vendor/
   script:
     - docker-compose up -d --build
     - docker ps
