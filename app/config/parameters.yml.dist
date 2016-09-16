@@ -16,6 +16,6 @@ parameters:
     mailer_user:       noreply@nathanaelcherrier.com
     mailer_password:   ~
 
-    secret:            ~
+    secret:            ssZ2eDojZEezF3sZ2eDoeZEseFZ23DokZEdsF3Z2eDo
 
     locale:            fr
