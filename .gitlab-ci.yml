@@ -9,3 +9,4 @@ build_smalink:
   script:
     - docker-compose up -d --build
     - docker ps
+    - docker exec $(docker ps -f name=smalink_fpm -q) composer install
