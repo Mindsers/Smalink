@@ -2,15 +2,11 @@ stages:
   - build
 
 before_script:
-  - docker info
+  - docker ps
 
 build_smalink:
   stage: build
-  cache:
-    paths:
-      - docker/mysql/data/
-      - vendor/
   script:
     - docker-compose up -d --build
-    - docker ps
     - docker exec $(docker ps -f name=smalink_fpm -q) composer install
+    - docker exec $(docker ps -f name=smalink_fpm -q) php bin/console doctrine:schema:update --force
