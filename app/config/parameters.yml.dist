@@ -7,7 +7,7 @@ parameters:
     database_port:     3306
     database_name:     smalink
     database_user:     smalinku
-    database_password: ~
+    database_password: smalinkp
 
     mailer_transport:  smtp
     mailer_auth_mode:  login
