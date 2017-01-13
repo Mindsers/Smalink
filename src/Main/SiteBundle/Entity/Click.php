@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Click
  *
- * @ORM\Table(name="smalink_click")
+ * @ORM\Table(name="click")
  * @ORM\Entity(repositoryClass="Main\SiteBundle\Entity\ClickRepository")
  */
 class Click
@@ -58,7 +58,7 @@ class Click
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -74,14 +74,14 @@ class Click
     public function setCountry($country)
     {
         $this->country = $country;
-    
+
         return $this;
     }
 
     /**
      * Get country
      *
-     * @return string 
+     * @return string
      */
     public function getCountry()
     {
@@ -97,14 +97,14 @@ class Click
     public function setReferrer($referrer)
     {
         $this->referrer = $referrer;
-    
+
         return $this;
     }
 
     /**
      * Get referrer
      *
-     * @return string 
+     * @return string
      */
     public function getReferrer()
     {
@@ -120,14 +120,14 @@ class Click
     public function setLink(\Main\SiteBundle\Entity\Link $link)
     {
         $this->link = $link;
-    
+
         return $this;
     }
 
     /**
      * Get link
      *
-     * @return \Main\SiteBundle\Entity\Link 
+     * @return \Main\SiteBundle\Entity\Link
      */
     public function getLink()
     {
@@ -143,14 +143,14 @@ class Click
     public function setDate($date)
     {
         $this->date = $date;
-    
+
         return $this;
     }
 
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {

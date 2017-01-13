@@ -8,7 +8,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Link
  *
- * @ORM\Table(name="smalink_link")
+ * @ORM\Table(name="link")
  * @ORM\Entity(repositoryClass="Main\SiteBundle\Entity\LinkRepository")
  * @UniqueEntity(fields="name", message="Un lien existe déjà avec ce nom.")
  * @UniqueEntity(fields="lien_small", message="Un lien existe déjà avec ce lien raccourcis. Relancez la génération.")
@@ -81,7 +81,7 @@ class Link
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -98,14 +98,14 @@ class Link
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -115,7 +115,7 @@ class Link
     /**
      * Get date
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getDate()
     {
@@ -131,14 +131,14 @@ class Link
     public function setLienReel($lienReel)
     {
         $this->lien_reel = $lienReel;
-    
+
         return $this;
     }
 
     /**
      * Get lien_reel
      *
-     * @return string 
+     * @return string
      */
     public function getLienReel()
     {
@@ -154,14 +154,14 @@ class Link
     public function setLienSmall($lienSmall)
     {
         $this->lien_small = $lienSmall;
-    
+
         return $this;
     }
 
     /**
      * Get lien_small
      *
-     * @return string 
+     * @return string
      */
     public function getLienSmall()
     {
@@ -177,14 +177,14 @@ class Link
     public function setActivate($activate)
     {
         $this->activate = $activate;
-    
+
         return $this;
     }
 
     /**
      * Get activate
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getActivate()
     {
@@ -201,7 +201,7 @@ class Link
     public function setDate($date)
     {
         $this->date = $date;
-    
+
         return $this;
     }
 
@@ -215,7 +215,7 @@ class Link
     {
         $this->click[] = $click;
         $click->setLink($this);
-    
+
         return $this;
     }
 
@@ -233,7 +233,7 @@ class Link
     /**
      * Get click
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getClick()
     {
@@ -249,14 +249,14 @@ class Link
     public function setAuthor(\Main\UserBundle\Entity\User $author)
     {
         $this->author = $author;
-    
+
         return $this;
     }
 
     /**
      * Get author
      *
-     * @return \Main\UserBundle\Entity\User 
+     * @return \Main\UserBundle\Entity\User
      */
     public function getAuthor()
     {
